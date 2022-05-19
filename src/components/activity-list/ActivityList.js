@@ -95,6 +95,7 @@ const ActivityList = ({
     return currentPendingTransactionsCount;
   }, [sections, requests]);
   return network === networkTypes.mainnet || sections.length ? (
+    // `recyclerListView` is `true` only for on iOS.
     recyclerListView ? (
       <RecyclerActivityList
         addCashAvailable={addCashAvailable}

@@ -1,6 +1,6 @@
+import React from 'react';
 import { format } from 'date-fns';
 import { get, groupBy, isEmpty, map, toLower } from 'lodash';
-import { createElement } from 'react';
 import { createSelector } from 'reselect';
 import { RequestCoinRow, TransactionCoinRow } from '../components/coin-row';
 import {
@@ -10,17 +10,23 @@ import {
   yesterdayTimestamp,
 } from './transactions';
 import { TransactionStatusTypes } from '@rainbow-me/entities';
+import { RenderProfiler } from '@rainbow-me/performance/utils';
 
 const contactsSelector = state => state.contacts;
 const requestsSelector = state => state.requests;
-const transactionsSelector = state => state.transactions;
+const transactionsSelector = state => {
+  return state.transactions.map(item => {
+    return {
+      ...item,
+      mainnetAddress:
+        state.data.accountAssetsData?.[`${item.address}_${item.network}`]
+          ?.mainnet_address,
+    };
+  });
+};
 const focusedSelector = state => state.isFocused;
 const initializedSelector = state => state.initialized;
 
-const renderItemElement = renderItem =>
-  function InternarSectionListRender(renderItemProps) {
-    return createElement(renderItem, renderItemProps);
-  };
 const groupTransactionByDate = ({ pending, minedAt }) => {
   if (pending) return 'Pending';
 
@@ -66,7 +72,11 @@ const buildTransactionsSections = (
     );
     sectionedTransactions = Object.keys(transactionsByDate).map(section => ({
       data: transactionsByDate[section],
-      renderItem: renderItemElement(TransactionCoinRow),
+      renderItem: ({ item }) => (
+        <RenderProfiler name="TransactionCoinRow" update every mount>
+          <TransactionCoinRow item={item} />
+        </RenderProfiler>
+      ),
       title: section,
     }));
     const pendingSectionIndex = sectionedTransactions.findIndex(
@@ -86,7 +96,7 @@ const buildTransactionsSections = (
     requestsToApprove = [
       {
         data: requests,
-        renderItem: renderItemElement(RequestCoinRow),
+        renderItem: ({ item }) => <RequestCoinRow item={item} />,
         title: 'Requests',
       },
     ];

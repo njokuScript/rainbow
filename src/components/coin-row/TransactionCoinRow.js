@@ -62,7 +62,7 @@ const BottomRow = ({ description, native, status, type }) => {
   return (
     <Row align="center" justify="space-between">
       <FlexItem flex={1}>
-        <CoinName color={coinNameColor}>{description}</CoinName>
+        <CoinName color={coinNameColor}>test{description}</CoinName>
       </FlexItem>
       <BalanceText
         color={balanceTextColor}
@@ -84,7 +84,7 @@ const TopRow = ({ balance, pending, status, title }) => (
 );
 
 export default function TransactionCoinRow({ item, ...props }) {
-  const { contact } = item;
+  const { contact, mainnetAddress } = item;
   const { accountAddress } = useAccountSettings();
   const { navigate } = useNavigation();
 
@@ -194,11 +194,13 @@ export default function TransactionCoinRow({ item, ...props }) {
     }
   }, [accountAddress, contact, item, navigate]);
 
-  const mainnetAddress = useSelector(
+  const mainnetAddress2 = useSelector(
     state =>
       state.data.accountAssetsData?.[`${item.address}_${item.network}`]
         ?.mainnet_address
   );
+
+  global.console.log({ mainnetAddress, mainnetAddress2 });
 
   return (
     <ButtonPressAnimation onPress={onPressTransaction} scaleTo={0.96}>

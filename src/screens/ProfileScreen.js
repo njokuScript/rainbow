@@ -110,6 +110,7 @@ export default function ProfileScreen({ navigation }) {
           transactions={transactions}
         />
       ) : (
+        // Android always falls back to this.
         <ActivityList
           addCashAvailable={addCashAvailable}
           header={
