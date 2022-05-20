@@ -110,7 +110,6 @@ export default function ProfileScreen({ navigation }) {
           transactions={transactions}
         />
       ) : (
-        // Android always falls back to this.
         <ActivityList
           addCashAvailable={addCashAvailable}
           header={
@@ -123,7 +122,6 @@ export default function ProfileScreen({ navigation }) {
           isLoading={isLoading}
           navigation={navigation}
           network={network}
-          recyclerListView={ios}
           sections={sections}
           {...accountTransactions}
         />

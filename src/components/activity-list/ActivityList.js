@@ -10,7 +10,6 @@ import { CoinRowHeight } from '../coin-row';
 import Text from '../text/Text';
 import ActivityListEmptyState from './ActivityListEmptyState';
 import ActivityListHeader from './ActivityListHeader';
-import RecyclerActivityList from './RecyclerActivityList';
 import styled from '@rainbow-me/styled-components';
 
 const getItemLayout = (data, index) => ({
@@ -76,12 +75,8 @@ const ActivityList = ({
   sections,
   requests,
   transactionsCount,
-  addCashAvailable,
   isEmpty,
-  isLoading,
-  navigation,
   network,
-  recyclerListView,
   nextPage,
   remainingItemsLabel,
 }) => {
@@ -95,17 +90,7 @@ const ActivityList = ({
     return currentPendingTransactionsCount;
   }, [sections, requests]);
   return network === networkTypes.mainnet || sections.length ? (
-    // `recyclerListView` is `true` only for on iOS.
-    recyclerListView ? (
-      <RecyclerActivityList
-        addCashAvailable={addCashAvailable}
-        header={header}
-        isEmpty={isEmpty}
-        isLoading={isLoading}
-        navigation={navigation}
-        sections={sections}
-      />
-    ) : isEmpty ? (
+    isEmpty ? (
       <ActivityListEmptyState>{header}</ActivityListEmptyState>
     ) : (
       <SectionList
