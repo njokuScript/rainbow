@@ -7,7 +7,6 @@ import { Text } from '../text';
 import { useTheme } from '../../context/ThemeContext';
 import { getRandomColor } from '../../styles/colors';
 import { ButtonPressAnimation } from '../animations';
-import CoinName from './CoinName';
 import { TransactionStatusTypes, TransactionTypes } from '@rainbow-me/entities';
 import TransactionActions from '@rainbow-me/helpers/transactionActions';
 import {
@@ -40,11 +39,15 @@ const cx = StyleSheet.create({
     flex: 1,
     marginLeft: 8,
   },
-  topRow: {
+  bottomRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
     flex: 1,
+  },
+  topRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
   },
 });
 
@@ -53,13 +56,15 @@ const BottomRow = ({
   native,
   status,
   type,
+  theme,
 }: {
   description: string;
   native: string;
   status: keyof typeof TransactionStatusTypes;
   type: keyof typeof TransactionTypes;
+  theme: ReturnType<typeof useTheme>;
 }) => {
-  const { colors } = useTheme();
+  const { colors } = theme;
   const isFailed = status === TransactionStatusTypes.failed;
   const isReceived =
     status === TransactionStatusTypes.received ||
@@ -86,8 +91,15 @@ const BottomRow = ({
     : '';
 
   return (
-    <View style={cx.topRow}>
-      <CoinName color={coinNameColor}>{description}</CoinName>
+    <View style={cx.bottomRow}>
+      <TruncatedText
+        color={coinNameColor || colors.dark}
+        letterSpacing="roundedMedium"
+        lineHeight="normal"
+        size="lmedium"
+      >
+        {description}
+      </TruncatedText>
       <Text
         align="right"
         color={balanceTextColor || colors.dark}
@@ -105,15 +117,17 @@ const TopRow = ({
   pending,
   status,
   title,
+  theme,
 }: {
   balance: string;
   pending: boolean;
   status: keyof typeof TransactionStatusTypes;
   title: string;
+  theme: ReturnType<typeof useTheme>;
 }) => {
-  const { colors } = useTheme();
+  const { colors } = theme;
   return (
-    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+    <View style={cx.topRow}>
       <FastTransactionStatusBadge
         pending={pending}
         status={status}
@@ -260,8 +274,8 @@ export default function TransactionCoinRow({ item, ...props }: { item: any }) {
             theme={theme}
           />
           <View style={cx.column}>
-            <TopRow {...item} />
-            <BottomRow {...item} />
+            <TopRow {...item} theme={theme} />
+            <BottomRow {...item} theme={theme} />
           </View>
         </View>
       </RenderProfiler>
