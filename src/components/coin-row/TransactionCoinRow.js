@@ -27,6 +27,7 @@ import {
   ethereumUtils,
   showActionSheetWithOptions,
 } from '@rainbow-me/utils';
+import { RenderProfiler } from '@rainbow-me/performance/utils';
 
 const containerStyles = {
   paddingLeft: 19,
@@ -62,7 +63,7 @@ const BottomRow = ({ description, native, status, type }) => {
   return (
     <Row align="center" justify="space-between">
       <FlexItem flex={1}>
-        <CoinName color={coinNameColor}>test{description}</CoinName>
+        <CoinName color={coinNameColor}>{description}</CoinName>
       </FlexItem>
       <BalanceText
         color={balanceTextColor}
@@ -84,7 +85,7 @@ const TopRow = ({ balance, pending, status, title }) => (
 );
 
 export default function TransactionCoinRow({ item, ...props }) {
-  const { contact, mainnetAddress } = item;
+  const { contact } = item;
   const { accountAddress } = useAccountSettings();
   const { navigate } = useNavigation();
 
@@ -194,32 +195,33 @@ export default function TransactionCoinRow({ item, ...props }) {
     }
   }, [accountAddress, contact, item, navigate]);
 
-  const mainnetAddress2 = useSelector(
+  const mainnetAddress = useSelector(
     state =>
       state.data.accountAssetsData?.[`${item.address}_${item.network}`]
         ?.mainnet_address
   );
 
-  global.console.log({ mainnetAddress, mainnetAddress2 });
-
   return (
     <ButtonPressAnimation onPress={onPressTransaction} scaleTo={0.96}>
-      <CoinRow
-        {...item}
-        {...props}
-        address={mainnetAddress || item.address}
-        bottomRowRender={BottomRow}
-        containerStyles={containerStyles}
-        {...(android
-          ? {
-              contentStyles: {
-                height: CoinIconSize + 14,
-              },
-            }
-          : {})}
-        topRowRender={TopRow}
-        type={item.network}
-      />
+      {/* <FastTransactionCoinRow></FastTransactionCoinRow> */}
+      <RenderProfiler name="CoinRow" update>
+        <CoinRow
+          {...item}
+          {...props}
+          address={mainnetAddress || item.address}
+          bottomRowRender={BottomRow}
+          containerStyles={containerStyles}
+          {...(android
+            ? {
+                contentStyles: {
+                  height: CoinIconSize + 14,
+                },
+              }
+            : {})}
+          topRowRender={TopRow}
+          type={item.network}
+        />
+      </RenderProfiler>
     </ButtonPressAnimation>
   );
 }

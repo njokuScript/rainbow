@@ -2,7 +2,7 @@ import React from 'react';
 import { format } from 'date-fns';
 import { get, groupBy, isEmpty, map, toLower } from 'lodash';
 import { createSelector } from 'reselect';
-import { RequestCoinRow, TransactionCoinRow } from '../components/coin-row';
+import { FastTransactionCoinRow, RequestCoinRow } from '../components/coin-row';
 import {
   thisMonthTimestamp,
   thisYearTimestamp,
@@ -74,7 +74,7 @@ const buildTransactionsSections = (
       data: transactionsByDate[section],
       renderItem: ({ item }) => (
         <RenderProfiler name="TransactionCoinRow" update every mount>
-          <TransactionCoinRow item={item} />
+          <FastTransactionCoinRow item={item} />
         </RenderProfiler>
       ),
       title: section,
