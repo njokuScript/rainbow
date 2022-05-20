@@ -27,7 +27,6 @@ import {
   ethereumUtils,
   showActionSheetWithOptions,
 } from '@rainbow-me/utils';
-import { RenderProfiler } from '@rainbow-me/performance/utils';
 
 const containerStyles = {
   paddingLeft: 19,
@@ -203,25 +202,22 @@ export default function TransactionCoinRow({ item, ...props }) {
 
   return (
     <ButtonPressAnimation onPress={onPressTransaction} scaleTo={0.96}>
-      {/* <FastTransactionCoinRow></FastTransactionCoinRow> */}
-      <RenderProfiler name="CoinRow" update>
-        <CoinRow
-          {...item}
-          {...props}
-          address={mainnetAddress || item.address}
-          bottomRowRender={BottomRow}
-          containerStyles={containerStyles}
-          {...(android
-            ? {
-                contentStyles: {
-                  height: CoinIconSize + 14,
-                },
-              }
-            : {})}
-          topRowRender={TopRow}
-          type={item.network}
-        />
-      </RenderProfiler>
+      <CoinRow
+        {...item}
+        {...props}
+        address={mainnetAddress || item.address}
+        bottomRowRender={BottomRow}
+        containerStyles={containerStyles}
+        {...(android
+          ? {
+              contentStyles: {
+                height: CoinIconSize + 14,
+              },
+            }
+          : {})}
+        topRowRender={TopRow}
+        type={item.network}
+      />
     </ButtonPressAnimation>
   );
 }

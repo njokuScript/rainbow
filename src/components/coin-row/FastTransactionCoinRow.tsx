@@ -2,16 +2,12 @@ import lang from 'i18n-js';
 import { compact, get, startCase, toLower } from 'lodash';
 import React, { useCallback } from 'react';
 import { useSelector } from 'react-redux';
+import { StyleSheet, View } from 'react-native';
+import { Text } from '../text';
 import { useTheme } from '../../context/ThemeContext';
 import { getRandomColor } from '../../styles/colors';
 import { ButtonPressAnimation } from '../animations';
-import { CoinIconSize } from '../coin-icon';
-import { FlexItem, Row, RowWithMargins } from '../layout';
-import BalanceText from './BalanceText';
-import BottomRowText from './BottomRowText';
 import CoinName from './CoinName';
-import CoinRow from './CoinRow';
-import TransactionStatusBadge from './TransactionStatusBadge';
 import { TransactionStatusTypes, TransactionTypes } from '@rainbow-me/entities';
 import TransactionActions from '@rainbow-me/helpers/transactionActions';
 import {
@@ -29,10 +25,28 @@ import {
 } from '@rainbow-me/utils';
 import { RenderProfiler } from '@rainbow-me/performance/utils';
 import FastTransactionStatusBadge from './FastTransactionStatusBadge';
+import FastCoinIcon from '../asset-list/RecyclerAssetList2/FastComponents/FastCoinIcon';
+import TruncatedText from '../text/TruncatedText';
 
-const containerStyles = {
-  paddingLeft: 19,
-};
+const cx = StyleSheet.create({
+  wholeRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingHorizontal: 19,
+    paddingVertical: 10,
+  },
+  column: {
+    flex: 1,
+    marginLeft: 8,
+  },
+  topRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    flex: 1,
+  },
+});
 
 const BottomRow = ({
   description,
@@ -72,17 +86,17 @@ const BottomRow = ({
     : '';
 
   return (
-    <Row align="center" justify="space-between">
-      <FlexItem flex={1}>
-        <CoinName color={coinNameColor}>{description}</CoinName>
-      </FlexItem>
-      <BalanceText
-        color={balanceTextColor}
+    <View style={cx.topRow}>
+      <CoinName color={coinNameColor}>{description}</CoinName>
+      <Text
+        align="right"
+        color={balanceTextColor || colors.dark}
+        size="lmedium"
         weight={isReceived ? 'medium' : null}
       >
         {balanceText}
-      </BalanceText>
-    </Row>
+      </Text>
+    </View>
   );
 };
 
@@ -96,18 +110,25 @@ const TopRow = ({
   pending: boolean;
   status: keyof typeof TransactionStatusTypes;
   title: string;
-}) => (
-  <RowWithMargins align="center" justify="space-between" margin={19}>
-    <FastTransactionStatusBadge
-      pending={pending}
-      status={status}
-      title={title}
-    />
-    <Row align="center" flex={1} justify="end">
-      <BottomRowText align="right">{get(balance, 'display', '')}</BottomRowText>
-    </Row>
-  </RowWithMargins>
-);
+}) => {
+  const { colors } = useTheme();
+  return (
+    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+      <FastTransactionStatusBadge
+        pending={pending}
+        status={status}
+        title={title}
+      />
+      <TruncatedText
+        size="smedium"
+        color={colors.alpha(colors.blueGreyDark, 0.5)}
+        align="right"
+      >
+        {get(balance, 'display', '')}
+      </TruncatedText>
+    </View>
+  );
+};
 
 export default function TransactionCoinRow({ item, ...props }: { item: any }) {
   const { contact } = item;
@@ -226,26 +247,23 @@ export default function TransactionCoinRow({ item, ...props }: { item: any }) {
         ?.mainnet_address
   );
 
+  const theme = useTheme();
+
   return (
     <ButtonPressAnimation onPress={onPressTransaction} scaleTo={0.96}>
-      {/* <FastTransactionCoinRow></FastTransactionCoinRow> */}
       <RenderProfiler name="CoinRow" update>
-        <CoinRow
-          {...item}
-          {...props}
-          address={mainnetAddress || item.address}
-          bottomRowRender={BottomRow}
-          containerStyles={containerStyles}
-          {...(android
-            ? {
-                contentStyles: {
-                  height: CoinIconSize + 14,
-                },
-              }
-            : {})}
-          topRowRender={TopRow}
-          type={item.network}
-        />
+        <View style={cx.wholeRow}>
+          <FastCoinIcon
+            address={mainnetAddress || item.address}
+            symbol={item.symbol}
+            assetType={item.assetType}
+            theme={theme}
+          />
+          <View style={cx.column}>
+            <TopRow {...item} />
+            <BottomRow {...item} />
+          </View>
+        </View>
       </RenderProfiler>
     </ButtonPressAnimation>
   );
