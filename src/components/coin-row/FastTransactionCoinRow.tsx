@@ -1,5 +1,4 @@
 import lang from 'i18n-js';
-import { compact, get, startCase, toLower } from 'lodash';
 import React, { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useTheme } from '../../context/ThemeContext';
@@ -24,6 +23,9 @@ import {
   ethereumUtils,
   showActionSheetWithOptions,
 } from '@rainbow-me/utils';
+
+const startCase = (string: string) =>
+  string.charAt(0).toUpperCase() + string.slice(1);
 
 const cx = StyleSheet.create({
   bottomRow: {
@@ -57,7 +59,7 @@ const BottomRow = ({
   theme,
 }: {
   description: string;
-  native: string;
+  native: any;
   status: keyof typeof TransactionStatusTypes;
   type: keyof typeof TransactionTypes;
   theme: ReturnType<typeof useTheme>;
@@ -83,9 +85,9 @@ const BottomRow = ({
   if (isIncomingSwap) balanceTextColor = colors.swapPurple;
   if (isOutgoingSwap) balanceTextColor = colors.dark;
 
-  const nativeDisplay = get(native, 'display');
+  const nativeDisplay = native?.display;
   const balanceText = nativeDisplay
-    ? compact([isFailed || isSent ? '-' : null, nativeDisplay]).join(' ')
+    ? [isFailed || isSent ? '-' : null, nativeDisplay].filter(Boolean).join(' ')
     : '';
 
   return (
@@ -110,41 +112,10 @@ const BottomRow = ({
   );
 };
 
-const TopRow = ({
-  balance,
-  pending,
-  status,
-  title,
-  theme,
-}: {
-  balance: string;
-  pending: boolean;
-  status: keyof typeof TransactionStatusTypes;
-  title: string;
-  theme: ReturnType<typeof useTheme>;
-}) => {
-  const { colors } = theme;
-  return (
-    <View style={cx.topRow}>
-      <FastTransactionStatusBadge
-        pending={pending}
-        status={status}
-        title={title}
-      />
-      <TruncatedText
-        align="right"
-        color={colors.alpha(colors.blueGreyDark, 0.5)}
-        size="smedium"
-      >
-        {get(balance, 'display', '')}
-      </TruncatedText>
-    </View>
-  );
-};
-
-export default function TransactionCoinRow({ item }: { item: any }) {
+export default React.memo(function TransactionCoinRow({ item }: { item: any }) {
   const { accountAddress, contact, mainnetAddress, theme } = item;
   const { navigate } = useNavigation();
+  const { colors } = theme;
 
   const onPressTransaction = useCallback(async () => {
     const { hash, from, minedAt, pending, to, status, type, network } = item;
@@ -155,7 +126,7 @@ export default function TransactionCoinRow({ item }: { item: any }) {
       status === TransactionStatusTypes.sent;
     const showContactInfo = hasAddableContact(status, type);
 
-    const isOutgoing = toLower(from) === toLower(accountAddress);
+    const isOutgoing = from?.toLowerCase() === accountAddress?.toLowerCase();
     const canBeResubmitted = isOutgoing && !minedAt;
     const canBeCancelled =
       canBeResubmitted && status !== TransactionStatusTypes.cancelling;
@@ -263,11 +234,30 @@ export default function TransactionCoinRow({ item }: { item: any }) {
             theme={theme}
           />
           <View style={cx.column}>
-            <TopRow {...item} theme={theme} />
-            <BottomRow {...item} theme={theme} />
+            <View style={cx.topRow}>
+              <FastTransactionStatusBadge
+                pending={item.pending}
+                status={item.status}
+                title={item.title}
+              />
+              <TruncatedText
+                align="right"
+                color={colors.alpha(colors.blueGreyDark, 0.5)}
+                size="smedium"
+              >
+                {item.balance?.display ?? ''}
+              </TruncatedText>
+            </View>
+            <BottomRow
+              description={item.description}
+              native={item.native}
+              status={item.status}
+              theme={theme}
+              type={item.type}
+            />
           </View>
         </View>
       </RenderProfiler>
     </ButtonPressAnimation>
   );
-}
+});

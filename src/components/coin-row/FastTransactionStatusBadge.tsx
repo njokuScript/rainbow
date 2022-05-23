@@ -1,4 +1,3 @@
-import { includes } from 'lodash';
 import React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import Spinner from '../Spinner';
@@ -7,7 +6,6 @@ import { Text } from '../text';
 import { useTheme } from '@rainbow-me/context';
 import { TransactionStatusTypes } from '@rainbow-me/entities';
 import { position } from '@rainbow-me/styles';
-import { magicMemo } from '@rainbow-me/utils';
 
 const StatusProps = {
   [TransactionStatusTypes.approved]: {
@@ -125,7 +123,7 @@ const FastTransactionStatusBadge = ({
           size={12}
         />
       )}
-      {status && includes(Object.keys(StatusProps), status) && (
+      {status && Object.keys(StatusProps).includes(status) && (
         <Icon
           color={statusColor}
           style={position.maxSizeAsObject(10)}
@@ -139,8 +137,4 @@ const FastTransactionStatusBadge = ({
   );
 };
 
-export default magicMemo(FastTransactionStatusBadge, [
-  'pending',
-  'status',
-  'title',
-]);
+export default React.memo(FastTransactionStatusBadge);
