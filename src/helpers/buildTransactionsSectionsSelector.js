@@ -1,6 +1,6 @@
-import React from 'react';
 import { format } from 'date-fns';
 import { get, groupBy, isEmpty, map, toLower } from 'lodash';
+import React from 'react';
 import { createSelector } from 'reselect';
 import { FastTransactionCoinRow, RequestCoinRow } from '../components/coin-row';
 import {
@@ -12,18 +12,12 @@ import {
 import { TransactionStatusTypes } from '@rainbow-me/entities';
 import { RenderProfiler } from '@rainbow-me/performance/utils';
 
+const accountAssetsDataSelector = state => state.accountAssetsData;
+const accountAddressSelector = state => state.accountAddress;
 const contactsSelector = state => state.contacts;
 const requestsSelector = state => state.requests;
-const transactionsSelector = state => {
-  return state.transactions.map(item => {
-    return {
-      ...item,
-      mainnetAddress:
-        state.data.accountAssetsData?.[`${item.address}_${item.network}`]
-          ?.mainnet_address,
-    };
-  });
-};
+const themeSelector = state => state.theme;
+const transactionsSelector = state => state.transactions;
 const focusedSelector = state => state.isFocused;
 const initializedSelector = state => state.initialized;
 
@@ -51,8 +45,11 @@ const addContactInfo = contacts => txn => {
 };
 
 const buildTransactionsSections = (
+  accountAddress,
+  accountAssetsData,
   contacts,
   requests,
+  theme,
   transactions,
   isFocused,
   initialized
@@ -71,9 +68,15 @@ const buildTransactionsSections = (
       groupTransactionByDate
     );
     sectionedTransactions = Object.keys(transactionsByDate).map(section => ({
-      data: transactionsByDate[section],
+      data: transactionsByDate[section].map(txn => ({
+        ...txn,
+        accountAddress,
+        mainnetAddress:
+          accountAssetsData[`${txn.address}_${txn.network}`]?.mainnet_address,
+        theme,
+      })),
       renderItem: ({ item }) => (
-        <RenderProfiler name="TransactionCoinRow" update every mount>
+        <RenderProfiler every mount name="TransactionCoinRow" update>
           <FastTransactionCoinRow item={item} />
         </RenderProfiler>
       ),
@@ -108,9 +111,13 @@ const buildTransactionsSections = (
 
 export const buildTransactionsSectionsSelector = createSelector(
   [
+    accountAddressSelector,
+    accountAssetsDataSelector,
     contactsSelector,
     requestsSelector,
+    themeSelector,
     transactionsSelector,
+    // accountAssetsDataSelector,
     focusedSelector,
     initializedSelector,
   ],

@@ -2,7 +2,6 @@ import lang from 'i18n-js';
 import { compact, get, startCase, toLower } from 'lodash';
 import React, { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useSelector } from 'react-redux';
 import { useTheme } from '../../context/ThemeContext';
 import { getRandomColor } from '../../styles/colors';
 import { ButtonPressAnimation } from '../animations';
@@ -17,7 +16,6 @@ import {
   hasAddableContact,
 } from '@rainbow-me/helpers/transactions';
 import { isValidDomainFormat } from '@rainbow-me/helpers/validators';
-import { useAccountSettings } from '@rainbow-me/hooks';
 import { useNavigation } from '@rainbow-me/navigation';
 import { RenderProfiler } from '@rainbow-me/performance/utils';
 import Routes from '@rainbow-me/routes';
@@ -145,8 +143,7 @@ const TopRow = ({
 };
 
 export default function TransactionCoinRow({ item }: { item: any }) {
-  const { contact } = item;
-  const { accountAddress } = useAccountSettings();
+  const { accountAddress, contact, mainnetAddress, theme } = item;
   const { navigate } = useNavigation();
 
   const onPressTransaction = useCallback(async () => {
@@ -254,14 +251,6 @@ export default function TransactionCoinRow({ item }: { item: any }) {
       );
     }
   }, [accountAddress, contact, item, navigate]);
-
-  const mainnetAddress = useSelector(
-    state =>
-      state.data.accountAssetsData?.[`${item.address}_${item.network}`]
-        ?.mainnet_address
-  );
-
-  const theme = useTheme();
 
   return (
     <ButtonPressAnimation onPress={onPressTransaction} scaleTo={0.96}>

@@ -2,22 +2,31 @@ import { useCallback, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { buildTransactionsSectionsSelector } from '../helpers/buildTransactionsSectionsSelector';
 import NetworkTypes from '../helpers/networkTypes';
+import useAccountSettings from './useAccountSettings';
 import useContacts from './useContacts';
 import useRequests from './useRequests';
+import { useTheme } from '@rainbow-me/context';
 
 export const NOE_PAGE = 30;
 
 export default function useAccountTransactions(initialized, isFocused) {
   const {
+    accountAssetsData,
     isLoadingTransactions,
     network,
     pendingTransactions,
     transactions,
   } = useSelector(
     ({
-      data: { isLoadingTransactions, pendingTransactions, transactions },
+      data: {
+        isLoadingTransactions,
+        pendingTransactions,
+        transactions,
+        accountAssetsData,
+      },
       settings: { network },
     }) => ({
+      accountAssetsData,
       isLoadingTransactions,
       network,
       pendingTransactions,
@@ -40,12 +49,17 @@ export default function useAccountTransactions(initialized, isFocused) {
 
   const { contacts } = useContacts();
   const { requests } = useRequests();
+  const { accountAddress } = useAccountSettings();
+  const theme = useTheme();
 
   const accountState = {
+    accountAddress,
+    accountAssetsData,
     contacts,
     initialized,
     isFocused,
     requests,
+    theme,
     transactions: slicedTransaction,
   };
 
