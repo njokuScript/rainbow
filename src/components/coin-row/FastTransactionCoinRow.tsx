@@ -1,12 +1,15 @@
 import lang from 'i18n-js';
 import { compact, get, startCase, toLower } from 'lodash';
 import React, { useCallback } from 'react';
-import { useSelector } from 'react-redux';
 import { StyleSheet, View } from 'react-native';
-import { Text } from '../text';
+import { useSelector } from 'react-redux';
 import { useTheme } from '../../context/ThemeContext';
 import { getRandomColor } from '../../styles/colors';
 import { ButtonPressAnimation } from '../animations';
+import FastCoinIcon from '../asset-list/RecyclerAssetList2/FastComponents/FastCoinIcon';
+import { Text } from '../text';
+import TruncatedText from '../text/TruncatedText';
+import FastTransactionStatusBadge from './FastTransactionStatusBadge';
 import { TransactionStatusTypes, TransactionTypes } from '@rainbow-me/entities';
 import TransactionActions from '@rainbow-me/helpers/transactionActions';
 import {
@@ -16,38 +19,35 @@ import {
 import { isValidDomainFormat } from '@rainbow-me/helpers/validators';
 import { useAccountSettings } from '@rainbow-me/hooks';
 import { useNavigation } from '@rainbow-me/navigation';
+import { RenderProfiler } from '@rainbow-me/performance/utils';
 import Routes from '@rainbow-me/routes';
 import {
   abbreviations,
   ethereumUtils,
   showActionSheetWithOptions,
 } from '@rainbow-me/utils';
-import { RenderProfiler } from '@rainbow-me/performance/utils';
-import FastTransactionStatusBadge from './FastTransactionStatusBadge';
-import FastCoinIcon from '../asset-list/RecyclerAssetList2/FastComponents/FastCoinIcon';
-import TruncatedText from '../text/TruncatedText';
 
 const cx = StyleSheet.create({
-  wholeRow: {
-    flexDirection: 'row',
+  bottomRow: {
     alignItems: 'center',
+    flex: 1,
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingHorizontal: 19,
-    paddingVertical: 10,
   },
   column: {
     flex: 1,
     marginLeft: 8,
   },
-  bottomRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    flex: 1,
-  },
   topRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  wholeRow: {
+    alignItems: 'center',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 19,
+    paddingVertical: 10,
   },
 });
 
@@ -134,9 +134,9 @@ const TopRow = ({
         title={title}
       />
       <TruncatedText
-        size="smedium"
-        color={colors.alpha(colors.blueGreyDark, 0.5)}
         align="right"
+        color={colors.alpha(colors.blueGreyDark, 0.5)}
+        size="smedium"
       >
         {get(balance, 'display', '')}
       </TruncatedText>
@@ -144,7 +144,7 @@ const TopRow = ({
   );
 };
 
-export default function TransactionCoinRow({ item, ...props }: { item: any }) {
+export default function TransactionCoinRow({ item }: { item: any }) {
   const { contact } = item;
   const { accountAddress } = useAccountSettings();
   const { navigate } = useNavigation();
@@ -269,8 +269,8 @@ export default function TransactionCoinRow({ item, ...props }: { item: any }) {
         <View style={cx.wholeRow}>
           <FastCoinIcon
             address={mainnetAddress || item.address}
-            symbol={item.symbol}
             assetType={item.assetType}
+            symbol={item.symbol}
             theme={theme}
           />
           <View style={cx.column}>
