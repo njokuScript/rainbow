@@ -5,9 +5,8 @@ import { useTheme } from '../../context/ThemeContext';
 import { getRandomColor } from '../../styles/colors';
 import { ButtonPressAnimation } from '../animations';
 import FastCoinIcon from '../asset-list/RecyclerAssetList2/FastComponents/FastCoinIcon';
-import { Text } from '../text';
-import TruncatedText from '../text/TruncatedText';
 import FastTransactionStatusBadge from './FastTransactionStatusBadge';
+import { Text } from '@rainbow-me/design-system';
 import { TransactionStatusTypes, TransactionTypes } from '@rainbow-me/entities';
 import TransactionActions from '@rainbow-me/helpers/transactionActions';
 import {
@@ -92,19 +91,14 @@ const BottomRow = ({
 
   return (
     <View style={cx.bottomRow}>
-      <TruncatedText
-        color={coinNameColor || colors.dark}
-        letterSpacing="roundedMedium"
-        lineHeight="normal"
-        size="lmedium"
-      >
+      <Text color={{ custom: coinNameColor || colors.dark }} size="16px">
         {description}
-      </TruncatedText>
+      </Text>
       <Text
         align="right"
-        color={balanceTextColor || colors.dark}
-        size="lmedium"
-        weight={isReceived ? 'medium' : null}
+        color={{ custom: balanceTextColor || colors.dark }}
+        size="16px"
+        weight={isReceived ? 'medium' : undefined}
       >
         {balanceText}
       </Text>
@@ -236,17 +230,18 @@ export default React.memo(function TransactionCoinRow({ item }: { item: any }) {
           <View style={cx.column}>
             <View style={cx.topRow}>
               <FastTransactionStatusBadge
+                colors={colors}
                 pending={item.pending}
                 status={item.status}
                 title={item.title}
               />
-              <TruncatedText
+              <Text
                 align="right"
-                color={colors.alpha(colors.blueGreyDark, 0.5)}
-                size="smedium"
+                color={{ custom: colors.alpha(colors.blueGreyDark, 0.5) }}
+                size="14px"
               >
                 {item.balance?.display ?? ''}
-              </TruncatedText>
+              </Text>
             </View>
             <BottomRow
               description={item.description}

@@ -2,8 +2,8 @@ import React from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import Spinner from '../Spinner';
 import { Icon } from '../icons';
-import { Text } from '../text';
 import { useTheme } from '@rainbow-me/context';
+import { Text } from '@rainbow-me/design-system';
 import { TransactionStatusTypes } from '@rainbow-me/entities';
 import { position } from '@rainbow-me/styles';
 
@@ -95,13 +95,14 @@ const FastTransactionStatusBadge = ({
   status,
   style,
   title,
+  colors,
 }: {
+  colors: ReturnType<typeof useTheme>['colors'];
   pending: boolean;
   status: keyof typeof TransactionStatusTypes;
   title: string;
   style?: StyleProp<ViewStyle>;
 }) => {
-  const { colors } = useTheme();
   const isSwapping = status === TransactionStatusTypes.swapping;
 
   let statusColor = colors.alpha(colors.blueGreyDark, 0.7);
@@ -130,7 +131,7 @@ const FastTransactionStatusBadge = ({
           {...StatusProps[status]}
         />
       )}
-      <Text color={statusColor} size="smedium" weight="semibold">
+      <Text color={{ custom: statusColor }} size="14px" weight="semibold">
         {title}
       </Text>
     </View>
