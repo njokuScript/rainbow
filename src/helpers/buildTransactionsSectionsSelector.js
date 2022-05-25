@@ -3,8 +3,8 @@ import { get, groupBy, isEmpty, map, toLower } from 'lodash';
 import React from 'react';
 import { createSelector } from 'reselect';
 import {
-  FastTransactionCoinRow,
   FastRequestCoinRow,
+  FastTransactionCoinRow,
 } from '../components/coin-row';
 import {
   thisMonthTimestamp,
