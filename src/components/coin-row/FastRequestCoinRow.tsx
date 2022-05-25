@@ -5,7 +5,7 @@ import { StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useTheme } from '../../context/ThemeContext';
 import { ButtonPressAnimation } from '../animations';
-import { RequestCoinIcon } from '../coin-icon';
+import { FastRequestCoinIcon } from '../coin-icon';
 import { Text } from '@rainbow-me/design-system';
 import { useNavigation } from '@rainbow-me/navigation';
 import { removeRequest } from '@rainbow-me/redux/requests';
@@ -97,7 +97,7 @@ export default React.memo(function RequestCoinRow({
       waitFor={buttonRef}
     >
       <View style={cx.wholeRow}>
-        <RequestCoinIcon
+        <FastRequestCoinIcon
           dappName={item.dappName}
           expirationColor={expirationColor}
           imageUrl={item.imageUrl}
