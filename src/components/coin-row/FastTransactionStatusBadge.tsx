@@ -87,6 +87,7 @@ const cx = StyleSheet.create({
   row: {
     alignItems: 'center',
     flexDirection: 'row',
+    marginRight: 8,
   },
 });
 

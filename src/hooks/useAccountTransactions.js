@@ -6,6 +6,7 @@ import useAccountSettings from './useAccountSettings';
 import useContacts from './useContacts';
 import useRequests from './useRequests';
 import { useTheme } from '@rainbow-me/context';
+import { useNavigation } from '@rainbow-me/navigation';
 
 export const NOE_PAGE = 30;
 
@@ -51,6 +52,7 @@ export default function useAccountTransactions(initialized, isFocused) {
   const { requests } = useRequests();
   const { accountAddress } = useAccountSettings();
   const theme = useTheme();
+  const { navigate } = useNavigation();
 
   const accountState = {
     accountAddress,
@@ -58,6 +60,7 @@ export default function useAccountTransactions(initialized, isFocused) {
     contacts,
     initialized,
     isFocused,
+    navigate,
     requests,
     theme,
     transactions: slicedTransaction,

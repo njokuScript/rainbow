@@ -6,6 +6,7 @@ import {
   FastRequestCoinRow,
   FastTransactionCoinRow,
 } from '../components/coin-row';
+import { transactionPressBuilder } from './transactionPressHandler';
 import {
   thisMonthTimestamp,
   thisYearTimestamp,
@@ -23,6 +24,7 @@ const themeSelector = state => state.theme;
 const transactionsSelector = state => state.transactions;
 const focusedSelector = state => state.isFocused;
 const initializedSelector = state => state.initialized;
+const navigateSelector = state => state.navigate;
 
 const groupTransactionByDate = ({ pending, minedAt }) => {
   if (pending) return 'Pending';
@@ -79,7 +81,11 @@ const buildTransactionsSections = (
       })),
       renderItem: ({ item }) => (
         <RenderProfiler every mount name="TransactionCoinRow" update>
-          <FastTransactionCoinRow item={item} theme={theme} />
+          <FastTransactionCoinRow
+            item={item}
+            onTransactionPress={onTransactionPress}
+            theme={theme}
+          />
         </RenderProfiler>
       ),
       title: section,
@@ -123,6 +129,7 @@ export const buildTransactionsSectionsSelector = createSelector(
     transactionsSelector,
     focusedSelector,
     initializedSelector,
+    navigateSelector,
   ],
   buildTransactionsSections
 );
