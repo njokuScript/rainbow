@@ -6,12 +6,10 @@ import { useDispatch } from 'react-redux';
 import { useTheme } from '../../context/ThemeContext';
 import { ButtonPressAnimation } from '../animations';
 import { RequestCoinIcon } from '../coin-icon';
-import { Emoji } from '../text';
 import { Text } from '@rainbow-me/design-system';
 import { useNavigation } from '@rainbow-me/navigation';
 import { removeRequest } from '@rainbow-me/redux/requests';
 import Routes from '@rainbow-me/routes';
-import styled from '@rainbow-me/styled-components';
 
 const cx = StyleSheet.create({
   bottomRow: {
@@ -27,6 +25,7 @@ const cx = StyleSheet.create({
   },
   topRow: {
     flexDirection: 'row',
+    marginTop: 8,
   },
   wholeRow: {
     flexDirection: 'row',
@@ -41,13 +40,6 @@ const getPercentageOfTimeElapsed = (startDate: Date, endDate: Date) => {
 
   return Math.floor((currentDifference * 100) / originalDifference);
 };
-
-const ClockEmoji = styled(Emoji).attrs({
-  name: 'clock4',
-  size: 'tiny',
-})({
-  marginTop: 1.75,
-});
 
 export default React.memo(function RequestCoinRow({
   item,
@@ -113,12 +105,13 @@ export default React.memo(function RequestCoinRow({
         />
         <View style={cx.column}>
           <View style={cx.topRow}>
-            <ClockEmoji />
             <Text
               color={{ custom: expirationColor }}
+              containsEmoji
               size="14px"
               weight="semibold"
             >
+              🕓{' '}
               {lang.t('exchange.coin_row.expires_in', {
                 minutes: minutes || 0,
               })}
