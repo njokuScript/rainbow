@@ -28,6 +28,7 @@ src/assets @skylarbarrera
 src/components @osdnk @terrysahaidak
 src/components/unique-token @jkadamczyk
 src/components/floating-emojis @jkadamczyk
+src/components/coin-icon @terrysahaidak @tchayen
 src/components/coin-row @terrysahaidak @tchayen
 
 # APP CONFIG
