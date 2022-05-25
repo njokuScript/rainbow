@@ -3,9 +3,9 @@ import lang from 'i18n-js';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { useTheme } from '../../context/ThemeContext';
 import { ButtonPressAnimation } from '../animations';
 import { FastRequestCoinIcon } from '../coin-icon';
+import { ThemeType } from '@rainbow-me/context';
 import { Text } from '@rainbow-me/design-system';
 import { useNavigation } from '@rainbow-me/navigation';
 import { removeRequest } from '@rainbow-me/redux/requests';
@@ -46,7 +46,7 @@ export default React.memo(function RequestCoinRow({
   theme,
 }: {
   item: any;
-  theme: ReturnType<typeof useTheme>;
+  theme: ThemeType;
 }) {
   const buttonRef = useRef();
   const dispatch = useDispatch();

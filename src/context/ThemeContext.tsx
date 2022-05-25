@@ -1,5 +1,6 @@
 import React, {
   createContext,
+  ReactNode,
   useContext,
   useEffect,
   useMemo,
@@ -25,16 +26,18 @@ export const THEMES = {
   SYSTEM: 'system',
 };
 
+type Scheme = keyof typeof THEMES;
+
 export const ThemeContext = createContext({
   colors: lightModeThemeColors,
   isDarkMode: false,
-  setTheme: () => {},
+  setTheme: (_scheme: Scheme) => {},
 });
 
 const { RNThemeModule } = NativeModules;
 
-export const MainThemeProvider = props => {
-  const [colorScheme, setColorScheme] = useState();
+export const MainThemeProvider = ({ children }: { children: ReactNode }) => {
+  const [colorScheme, setColorScheme] = useState<Scheme>();
 
   // looks like one works on Android and another one on iOS. good.
   const isSystemDarkModeIOS = useDarkMode();
@@ -68,7 +71,7 @@ export const MainThemeProvider = props => {
         true
       );
       currentColors.theme = userPrefSystemAdjusted;
-      currentColors.themedColors =
+      (currentColors as any).themedColors =
         userPrefSystemAdjusted === THEMES.DARK
           ? darkModeThemeColors
           : lightModeThemeColors;
@@ -96,7 +99,7 @@ export const MainThemeProvider = props => {
       isDarkMode: colorSchemeSystemAdjusted === 'dark',
       lightScheme: lightModeThemeColors,
       // Overrides the isDarkMode value will cause re-render inside the context.
-      setTheme: scheme => {
+      setTheme: (scheme: Scheme) => {
         const schemeSystemAdjusted =
           scheme === THEMES.SYSTEM
             ? isSystemDarkMode
@@ -110,7 +113,7 @@ export const MainThemeProvider = props => {
             : 'dark-content',
           true
         );
-        currentColors.themedColors =
+        (currentColors as any).themedColors =
           schemeSystemAdjusted === THEMES.DARK
             ? darkModeThemeColors
             : lightModeThemeColors;
@@ -134,7 +137,7 @@ export const MainThemeProvider = props => {
           <DesignSystemProvider
             colorMode={currentTheme.isDarkMode ? 'dark' : 'light'}
           >
-            {props.children}
+            {children}
           </DesignSystemProvider>
         </ThemeContext.Provider>
       </ThemeProvider>
@@ -145,8 +148,12 @@ export const MainThemeProvider = props => {
 // Custom hook to get the theme object returns {isDarkMode, colors, setTheme}
 export const useTheme = () => useContext(ThemeContext);
 
-export function withThemeContext(Component) {
-  return function WrapperComponent(props) {
+export type ThemeType = ReturnType<typeof useTheme>;
+
+type ComponentType = new (...args: any[]) => React.Component<any, any>;
+
+export function withThemeContext(Component: ComponentType) {
+  return function WrapperComponent(props: any) {
     return (
       <ThemeContext.Consumer>
         {state => <Component {...props} {...state} />}

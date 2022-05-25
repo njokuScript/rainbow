@@ -1,2 +1,2 @@
 export { default as currentColors } from './currentColors';
-export { useTheme } from './ThemeContext';
+export { useTheme, ThemeType } from './ThemeContext';

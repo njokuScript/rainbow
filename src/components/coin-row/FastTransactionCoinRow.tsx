@@ -1,11 +1,11 @@
 import lang from 'i18n-js';
 import React, { useCallback } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { useTheme } from '../../context/ThemeContext';
 import { getRandomColor } from '../../styles/colors';
 import { ButtonPressAnimation } from '../animations';
 import FastCoinIcon from '../asset-list/RecyclerAssetList2/FastComponents/FastCoinIcon';
 import FastTransactionStatusBadge from './FastTransactionStatusBadge';
+import { ThemeType } from '@rainbow-me/context';
 import { Text } from '@rainbow-me/design-system';
 import { TransactionStatusTypes, TransactionTypes } from '@rainbow-me/entities';
 import TransactionActions from '@rainbow-me/helpers/transactionActions';
@@ -61,7 +61,7 @@ const BottomRow = ({
   native: any;
   status: keyof typeof TransactionStatusTypes;
   type: keyof typeof TransactionTypes;
-  theme: ReturnType<typeof useTheme>;
+  theme: ThemeType;
 }) => {
   const { colors } = theme;
   const isFailed = status === TransactionStatusTypes.failed;
@@ -111,7 +111,7 @@ export default React.memo(function TransactionCoinRow({
   theme,
 }: {
   item: any;
-  theme: ReturnType<typeof useTheme>;
+  theme: ThemeType;
 }) {
   const { accountAddress, contact, mainnetAddress } = item;
   const { navigate } = useNavigation();

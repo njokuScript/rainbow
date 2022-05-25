@@ -121,7 +121,6 @@ export const buildTransactionsSectionsSelector = createSelector(
     requestsSelector,
     themeSelector,
     transactionsSelector,
-    // accountAssetsDataSelector,
     focusedSelector,
     initializedSelector,
   ],
