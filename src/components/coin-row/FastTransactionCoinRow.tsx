@@ -106,8 +106,14 @@ const BottomRow = ({
   );
 };
 
-export default React.memo(function TransactionCoinRow({ item }: { item: any }) {
-  const { accountAddress, contact, mainnetAddress, theme } = item;
+export default React.memo(function TransactionCoinRow({
+  item,
+  theme,
+}: {
+  item: any;
+  theme: ReturnType<typeof useTheme>;
+}) {
+  const { accountAddress, contact, mainnetAddress } = item;
   const { navigate } = useNavigation();
   const { colors } = theme;
 

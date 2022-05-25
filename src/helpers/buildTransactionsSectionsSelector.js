@@ -73,11 +73,10 @@ const buildTransactionsSections = (
         accountAddress,
         mainnetAddress:
           accountAssetsData[`${txn.address}_${txn.network}`]?.mainnet_address,
-        theme,
       })),
       renderItem: ({ item }) => (
         <RenderProfiler every mount name="TransactionCoinRow" update>
-          <FastTransactionCoinRow item={item} />
+          <FastTransactionCoinRow item={item} theme={theme} />
         </RenderProfiler>
       ),
       title: section,
@@ -99,7 +98,7 @@ const buildTransactionsSections = (
     requestsToApprove = [
       {
         data: requests,
-        renderItem: ({ item }) => <RequestCoinRow item={item} />,
+        renderItem: ({ item }) => <RequestCoinRow item={item} theme={theme} />,
         title: 'Requests',
       },
     ];
