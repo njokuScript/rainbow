@@ -1,20 +1,12 @@
 import { addHours, differenceInMinutes, isPast } from 'date-fns';
 import lang from 'i18n-js';
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useTheme } from '../../context/ThemeContext';
 import { ButtonPressAnimation } from '../animations';
 import { RequestCoinIcon } from '../coin-icon';
-import { RowWithMargins } from '../layout';
 import { Emoji } from '../text';
-import CoinName from './CoinName';
 import { Text } from '@rainbow-me/design-system';
 import { useNavigation } from '@rainbow-me/navigation';
 import { removeRequest } from '@rainbow-me/redux/requests';
@@ -30,18 +22,16 @@ const cx = StyleSheet.create({
   },
   column: {
     flex: 1,
+    justifyContent: 'center',
     marginLeft: 8,
   },
   topRow: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
   },
   wholeRow: {
-    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: 19,
-    paddingVertical: 10,
   },
 });
 
@@ -59,38 +49,19 @@ const ClockEmoji = styled(Emoji).attrs({
   marginTop: 1.75,
 });
 
-const BottomRow = ({ dappName, expirationColor }) => (
-  <CoinName color={expirationColor} weight="semibold">
-    {dappName}
-  </CoinName>
-);
-
-const TopRow = ({ expirationColor, expiresAt }) => {
-  const minutes = differenceInMinutes(expiresAt, Date.now());
-
-  return (
-    <RowWithMargins margin={2}>
-      <ClockEmoji />
-      <Text color={expirationColor} size="smedium" weight="semibold">
-        {lang.t('exchange.coin_row.expires_in', { minutes: minutes || 0 })}
-      </Text>
-    </RowWithMargins>
-  );
-};
-
-const RequestCoinRow = ({
+export default React.memo(function RequestCoinRow({
   item,
   theme,
 }: {
   item: any;
   theme: ReturnType<typeof useTheme>;
-}) => {
+}) {
   const buttonRef = useRef();
   const dispatch = useDispatch();
   const { navigate } = useNavigation();
   const [expiresAt, setExpiresAt] = useState<Date | null>(null);
-  const [expirationColor, setExpirationColor] = useState<string | null>(null);
-  const [percentElapsed, setPercentElapsed] = useState<number | null>(null);
+  const [expirationColor, setExpirationColor] = useState<string>('');
+  const [percentElapsed, setPercentElapsed] = useState<number>(0);
   const { colors } = theme;
 
   const minutes = expiresAt && differenceInMinutes(expiresAt, Date.now());
@@ -154,23 +125,16 @@ const RequestCoinRow = ({
             </Text>
           </View>
           <View style={cx.bottomRow}>
-            <CoinName color={expirationColor} weight="semibold">
+            <Text
+              color={{ custom: expirationColor }}
+              size="16px"
+              weight="semibold"
+            >
               {item.dappName}
-            </CoinName>
+            </Text>
           </View>
         </View>
       </View>
-      {/* <CoinRow
-        {...props}
-        {...overridenItem}
-        bottomRowRender={BottomRow}
-        coinIconRender={RequestCoinIcon}
-        expirationColor={expirationColor}
-        expiresAt={expiresAt}
-        topRowRender={TopRow}
-      /> */}
     </ButtonPressAnimation>
   );
-};
-
-export default RequestCoinRow;
+});

@@ -2,7 +2,10 @@ import { format } from 'date-fns';
 import { get, groupBy, isEmpty, map, toLower } from 'lodash';
 import React from 'react';
 import { createSelector } from 'reselect';
-import { FastTransactionCoinRow, RequestCoinRow } from '../components/coin-row';
+import {
+  FastTransactionCoinRow,
+  FastRequestCoinRow,
+} from '../components/coin-row';
 import {
   thisMonthTimestamp,
   thisYearTimestamp,
@@ -98,7 +101,9 @@ const buildTransactionsSections = (
     requestsToApprove = [
       {
         data: requests,
-        renderItem: ({ item }) => <RequestCoinRow item={item} theme={theme} />,
+        renderItem: ({ item }) => (
+          <FastRequestCoinRow item={item} theme={theme} />
+        ),
         title: 'Requests',
       },
     ];
