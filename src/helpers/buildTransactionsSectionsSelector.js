@@ -57,8 +57,11 @@ const buildTransactionsSections = (
   theme,
   transactions,
   isFocused,
-  initialized
+  initialized,
+  navigate
 ) => {
+  const onTransactionPress = transactionPressBuilder(navigate);
+
   if (!isFocused && !initialized) {
     return { sections: [] };
   }
