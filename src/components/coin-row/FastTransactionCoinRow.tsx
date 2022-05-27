@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { ButtonPressAnimation } from '../animations';
 import FastCoinIcon from '../asset-list/RecyclerAssetList2/FastComponents/FastCoinIcon';
 import FastTransactionStatusBadge from './FastTransactionStatusBadge';
-import { ThemeType } from '@rainbow-me/context';
+import { ThemeContextProps } from '@rainbow-me/context';
 import { Text } from '@rainbow-me/design-system';
 import { TransactionStatusTypes, TransactionTypes } from '@rainbow-me/entities';
 import { RenderProfiler } from '@rainbow-me/performance/utils';
@@ -48,7 +48,7 @@ const BottomRow = ({
   native: any;
   status: keyof typeof TransactionStatusTypes;
   type: keyof typeof TransactionTypes;
-  theme: ThemeType;
+  theme: ThemeContextProps;
 }) => {
   const { colors } = theme;
   const isFailed = status === TransactionStatusTypes.failed;
@@ -99,7 +99,7 @@ export default React.memo(function TransactionCoinRow({
   onTransactionPress,
 }: {
   item: any;
-  theme: ThemeType;
+  theme: ThemeContextProps;
   onTransactionPress: (item: any) => void;
 }) {
   const { mainnetAddress } = item;

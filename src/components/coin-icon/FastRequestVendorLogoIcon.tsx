@@ -4,13 +4,13 @@ import { initials } from '../../utils';
 import ChainBadge from '../coin-icon/ChainBadge';
 import { Text } from '../text';
 import { CoinIconSize } from './CoinIcon';
-import { ThemeType, useTheme } from '@rainbow-me/context';
+import { ThemeContextProps, useTheme } from '@rainbow-me/context';
 import { ImgixImage } from '@rainbow-me/images';
 import { position } from '@rainbow-me/styles';
 import ShadowStack from 'react-native-shadow-stack';
 
 const RVLIBorderRadius = 16.25;
-const RVLIShadows = (colors: ThemeType['colors']) => ({
+const RVLIShadows = (colors: ThemeContextProps['colors']) => ({
   default: [[0, 4, 12, colors.shadow, 0.06]],
   large: [[0, 6, 10, colors.shadow, 0.14]],
   none: [[0, 0, 0, colors.transparent, 0]],

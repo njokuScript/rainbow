@@ -1,14 +1,5 @@
 import { useQuery } from '@apollo/client';
-import {
-  concat,
-  find,
-  isEmpty,
-  isNil,
-  keyBy,
-  map,
-  orderBy,
-  toLower,
-} from 'lodash';
+import { concat, isEmpty, isNil, keyBy, map, orderBy, toLower } from 'lodash';
 import { useMemo } from 'react';
 import { useMMKVObject } from 'react-native-mmkv';
 import { useDispatch, useSelector } from 'react-redux';
@@ -211,8 +202,7 @@ export default function useSavingsAccount(includeDefaultDai) {
       ['desc']
     );
 
-    const accountHasCDAI = find(
-      orderedAccountTokens,
+    const accountHasCDAI = orderedAccountTokens.find(
       token => token.underlying.address === DAI_ADDRESS
     );
 
@@ -230,9 +220,12 @@ export default function useSavingsAccount(includeDefaultDai) {
     return savings;
   }, [includeDefaultDai, result, genericAssets]);
 
+  // savings returns the same object with the new reference over and over
+  const memoizedSavings = useDeepCompareMemo(() => savings, [savings]);
+
   return {
     refetchSavings,
-    savings,
+    savings: memoizedSavings,
     shouldRefetchSavings,
   };
 }

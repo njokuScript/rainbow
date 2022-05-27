@@ -1,5 +1,5 @@
 import { useRoute } from '@react-navigation/core';
-import { compact, find, get, isEmpty, keys, map, toLower } from 'lodash';
+import { compact, get, isEmpty, keys, map, toLower } from 'lodash';
 import React, { useEffect, useMemo, useState } from 'react';
 import { StatusBar } from 'react-native';
 import Animated from 'react-native-reanimated';
@@ -69,7 +69,6 @@ export default function WalletScreen() {
   const { isCoinListEdited } = useCoinListEdited();
   const scrollViewTracker = useValue(0);
   const { isReadOnlyWallet } = useWallets();
-  const { isEmpty: isAccountEmpty } = useAccountEmptyState();
   const { network } = useAccountSettings();
   const { userAccounts } = useUserAccounts();
   const { portfolios, trackPortfolios } = usePortfolios();
@@ -83,7 +82,11 @@ export default function WalletScreen() {
     refetchSavings,
     sections,
     shouldRefetchSavings,
+    isEmpty: isSectionsEmpty,
+    briefSectionsData: walletBriefSectionsData,
   } = useWalletSectionsData();
+
+  const { isEmpty: isAccountEmpty } = useAccountEmptyState(isSectionsEmpty);
 
   const dispatch = useDispatch();
   const profilesEnabled = useExperimentalFlag(PROFILES);
@@ -151,7 +154,7 @@ export default function WalletScreen() {
 
   useEffect(() => {
     if (initialized && assetsSocket && !fetchedCharts) {
-      const balancesSection = find(sections, ({ name }) => name === 'balances');
+      const balancesSection = sections.find(({ name }) => name === 'balances');
       const assetCodes = compact(map(balancesSection?.data, 'address'));
       if (!isEmpty(assetCodes)) {
         dispatch(emitChartsRequest(assetCodes));
@@ -209,6 +212,7 @@ export default function WalletScreen() {
           isWalletEthZero={isWalletEthZero}
           network={network}
           scrollViewTracker={scrollViewTracker}
+          walletBriefSectionsData={walletBriefSectionsData}
         />
       </FabWrapper>
     </WalletPage>
