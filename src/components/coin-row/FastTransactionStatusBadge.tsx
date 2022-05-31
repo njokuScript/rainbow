@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native';
 import Spinner from '../Spinner';
 import { Icon } from '../icons';
@@ -91,7 +91,7 @@ const cx = StyleSheet.create({
   },
 });
 
-const FastTransactionStatusBadge = ({
+export default React.memo(function FastTransactionStatusBadge({
   pending,
   status,
   style,
@@ -103,7 +103,7 @@ const FastTransactionStatusBadge = ({
   status: keyof typeof TransactionStatusTypes;
   title: string;
   style?: StyleProp<ViewStyle>;
-}) => {
+}) {
   const isSwapping = status === TransactionStatusTypes.swapping;
 
   let statusColor = colors.statusColor;
@@ -117,6 +117,11 @@ const FastTransactionStatusBadge = ({
     statusColor = colors.swapPurple;
   }
 
+  const showIcon = useMemo(
+    () => status && Object.keys(StatusProps).includes(status),
+    [status]
+  );
+
   return (
     <View style={[cx.row, style]}>
       {pending && (
@@ -125,7 +130,7 @@ const FastTransactionStatusBadge = ({
           size={12}
         />
       )}
-      {status && Object.keys(StatusProps).includes(status) && (
+      {showIcon && (
         <Icon
           color={statusColor}
           style={position.maxSizeAsObject(10)}
@@ -137,6 +142,4 @@ const FastTransactionStatusBadge = ({
       </Text>
     </View>
   );
-};
-
-export default React.memo(FastTransactionStatusBadge);
+});

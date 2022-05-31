@@ -7,6 +7,7 @@ import useContacts from './useContacts';
 import useRequests from './useRequests';
 import { useTheme } from '@rainbow-me/context';
 import { useNavigation } from '@rainbow-me/navigation';
+import { transactionPressBuilder } from '@rainbow-me/helpers/transactionPressHandler';
 
 export const NOE_PAGE = 30;
 
@@ -53,6 +54,9 @@ export default function useAccountTransactions(initialized, isFocused) {
   const { accountAddress } = useAccountSettings();
   const theme = useTheme();
   const { navigate } = useNavigation();
+  const onTransactionPress = useCallback(transactionPressBuilder(navigate), [
+    navigate,
+  ]);
 
   const accountState = {
     accountAddress,
@@ -60,7 +64,7 @@ export default function useAccountTransactions(initialized, isFocused) {
     contacts,
     initialized,
     isFocused,
-    navigate,
+    onTransactionPress,
     requests,
     theme,
     transactions: slicedTransaction,

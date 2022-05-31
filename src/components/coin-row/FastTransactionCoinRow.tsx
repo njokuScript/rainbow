@@ -37,7 +37,7 @@ const cx = StyleSheet.create({
   },
 });
 
-const BottomRow = ({
+const BottomRow = React.memo(function BottomRow({
   description,
   native,
   status,
@@ -49,7 +49,7 @@ const BottomRow = ({
   status: keyof typeof TransactionStatusTypes;
   type: keyof typeof TransactionTypes;
   theme: ThemeContextProps;
-}) => {
+}) {
   const { colors } = theme;
   const isFailed = status === TransactionStatusTypes.failed;
   const isReceived =
@@ -63,9 +63,9 @@ const BottomRow = ({
     type === TransactionTypes.trade;
 
   let coinNameColor = colors.dark;
-  if (isOutgoingSwap) coinNameColor = colors.alpha(colors.blueGreyDark, 0.5);
+  if (isOutgoingSwap) coinNameColor = colors.blueGreyDark50;
 
-  let balanceTextColor = colors.alpha(colors.blueGreyDark, 0.5);
+  let balanceTextColor = colors.blueGreyDark50;
   if (isReceived) balanceTextColor = colors.green;
   if (isSent) balanceTextColor = colors.dark;
   if (isIncomingSwap) balanceTextColor = colors.swapPurple;
@@ -91,7 +91,7 @@ const BottomRow = ({
       </Text>
     </View>
   );
-};
+});
 
 export default React.memo(function TransactionCoinRow({
   item,

@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 // @ts-ignore
 import { CircularProgress } from 'react-native-circular-progress';
-import { useTheme } from '../../context/ThemeContext';
+import { ThemeContextProps } from '../../context/ThemeContext';
 import FastRequestVendorLogoIcon from './FastRequestVendorLogoIcon';
 
 const RequestCoinIconSize = 48;
@@ -12,14 +12,16 @@ const RequestCoinIcon = ({
   imageUrl,
   percentElapsed,
   size = RequestCoinIconSize,
+  theme,
 }: {
   dappName: string;
   expirationColor: string;
   imageUrl: string;
   percentElapsed: number;
   size?: number;
+  theme: ThemeContextProps;
 }) => {
-  const { colors } = useTheme();
+  const { colors } = theme;
   const renderIcon = useCallback(
     // react-native-circular-progress expects a single function child.
     () => (

@@ -51,34 +51,44 @@ export default React.memo(function RequestCoinRow({
   const buttonRef = useRef();
   const dispatch = useDispatch();
   const { navigate } = useNavigation();
-  const [expiresAt, setExpiresAt] = useState<Date | null>(null);
-  const [expirationColor, setExpirationColor] = useState<string>('');
-  const [percentElapsed, setPercentElapsed] = useState<number>(0);
+  // const [expiresAt, setExpiresAt] = useState<Date | null>(null);
+  // const [expirationColor, setExpirationColor] = useState<string>('');
+  // const [percentElapsed, setPercentElapsed] = useState<number>(0);
+
+  const [state, setState] = useState<{
+    expirationColor: string;
+    expiresAt: Date | null;
+    percentElapsed: number;
+  }>({
+    expirationColor: '',
+    expiresAt: null,
+    percentElapsed: 0,
+  });
+
   const { colors } = theme;
 
-  const minutes = expiresAt && differenceInMinutes(expiresAt, Date.now());
+  const minutes =
+    state.expiresAt && differenceInMinutes(state.expiresAt, Date.now());
 
   useEffect(() => {
     if (item?.displayDetails?.timestampInMs) {
-      const _createdAt = new Date(item.displayDetails.timestampInMs);
-      const _expiresAt = addHours(_createdAt, 1);
-      const _percentElapsed = getPercentageOfTimeElapsed(
-        _createdAt,
-        _expiresAt
-      );
-      setExpiresAt(_expiresAt);
-      setPercentElapsed(_percentElapsed);
-      setExpirationColor(
-        _percentElapsed > 25 ? colors.appleBlue : colors.orange
-      );
+      const createdAt = new Date(item.displayDetails.timestampInMs);
+      const expiresAt = addHours(createdAt, 1);
+      const percentElapsed = getPercentageOfTimeElapsed(createdAt, expiresAt);
+
+      setState({
+        expirationColor: percentElapsed > 25 ? colors.appleBlue : colors.orange,
+        expiresAt,
+        percentElapsed,
+      });
     }
   }, [colors, item]);
 
   const handleExpiredRequests = useCallback(() => {
-    if (expiresAt && isPast(expiresAt)) {
+    if (state.expiresAt && isPast(state.expiresAt)) {
       dispatch(removeRequest(item.requestId));
     }
-  }, [dispatch, expiresAt, item.requestId]);
+  }, [dispatch, state.expiresAt, item.requestId]);
 
   const handlePressOpen = useCallback(() => {
     navigate(Routes.CONFIRM_REQUEST, {
@@ -88,7 +98,7 @@ export default React.memo(function RequestCoinRow({
 
   useEffect(() => {
     handleExpiredRequests();
-  }, [expiresAt, handleExpiredRequests]);
+  }, [state.expiresAt, handleExpiredRequests]);
 
   return (
     <ButtonPressAnimation
@@ -99,14 +109,15 @@ export default React.memo(function RequestCoinRow({
       <View style={cx.wholeRow}>
         <FastRequestCoinIcon
           dappName={item.dappName}
-          expirationColor={expirationColor}
+          expirationColor={state.expirationColor}
           imageUrl={item.imageUrl}
-          percentElapsed={percentElapsed}
+          percentElapsed={state.percentElapsed}
+          theme={theme}
         />
         <View style={cx.column}>
           <View style={cx.topRow}>
             <Text
-              color={{ custom: expirationColor }}
+              color={{ custom: state.expirationColor }}
               containsEmoji
               size="14px"
               weight="semibold"
@@ -119,7 +130,7 @@ export default React.memo(function RequestCoinRow({
           </View>
           <View style={cx.bottomRow}>
             <Text
-              color={{ custom: expirationColor }}
+              color={{ custom: state.expirationColor }}
               size="16px"
               weight="semibold"
             >

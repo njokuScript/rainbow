@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from 'react';
-import { View } from 'react-native';
+import React, { useCallback, useMemo, useState } from 'react';
+import { StyleSheet, View } from 'react-native';
 import { initials } from '../../utils';
 import ChainBadge from '../coin-icon/ChainBadge';
 import { Text } from '../text';
@@ -16,7 +16,17 @@ const RVLIShadows = (colors: ThemeContextProps['colors']) => ({
   none: [[0, 0, 0, colors.transparent, 0]],
 });
 
-export default function RequestVendorLogoIcon({
+const cx = StyleSheet.create({
+  container: {
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  imgix: {
+    ...position.sizeAsObject('100%'),
+  },
+});
+
+export default React.memo(function RequestVendorLogoIcon({
   backgroundColor,
   badgeYPosition = 14,
   borderRadius = RVLIBorderRadius,
@@ -27,7 +37,6 @@ export default function RequestVendorLogoIcon({
   showLargeShadow,
   size = CoinIconSize,
   network,
-  ...props
 }: {
   backgroundColor?: string;
   badgeYPosition?: number;
@@ -42,6 +51,8 @@ export default function RequestVendorLogoIcon({
 }) {
   const [error, setError] = useState(false);
   const { colors } = useTheme();
+
+  const onError = useCallback(() => setError(true), [setError]);
 
   // When dapps have no icon the bgColor provided to us is transparent.
   // Having a transparent background breaks our UI, so we instead show a background
@@ -60,11 +71,12 @@ export default function RequestVendorLogoIcon({
     [imageUrl, shouldPrioritizeImageLoading]
   );
 
+  const dappInitials = useMemo(() => initials(dappName), [dappName]);
+
   return (
     <View>
       {/* @ts-ignore ShadowStack is not in TS */}
       <ShadowStack
-        {...props}
         {...position.sizeAsObject(size)}
         backgroundColor={colors.white}
         borderRadius={borderRadius}
@@ -75,18 +87,19 @@ export default function RequestVendorLogoIcon({
         }
       >
         <View
-          style={{
-            alignItems: 'center',
-            backgroundColor: bgColor,
-            justifyContent: 'center',
-            ...position.sizeAsObject(size),
-          }}
+          style={[
+            cx.container,
+            {
+              backgroundColor: bgColor,
+              ...position.sizeAsObject(size),
+            },
+          ]}
         >
           {imageUrl && !error ? (
             <ImgixImage
-              onError={() => setError(true)}
+              onError={onError}
               source={imageSource}
-              style={position.sizeAsObject('100%')}
+              style={cx.imgix}
             />
           ) : (
             <Text
@@ -95,7 +108,7 @@ export default function RequestVendorLogoIcon({
               size="smedium"
               weight="semibold"
             >
-              {initials(dappName)}
+              {dappInitials}
             </Text>
           )}
         </View>
@@ -103,4 +116,4 @@ export default function RequestVendorLogoIcon({
       <ChainBadge assetType={network} badgeYPosition={badgeYPosition} />
     </View>
   );
-}
+});
