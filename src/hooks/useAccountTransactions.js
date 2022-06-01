@@ -6,8 +6,8 @@ import useAccountSettings from './useAccountSettings';
 import useContacts from './useContacts';
 import useRequests from './useRequests';
 import { useTheme } from '@rainbow-me/context';
-import { useNavigation } from '@rainbow-me/navigation';
 import { transactionPressBuilder } from '@rainbow-me/helpers/transactionPressHandler';
+import { useNavigation } from '@rainbow-me/navigation';
 
 export const NOE_PAGE = 30;
 

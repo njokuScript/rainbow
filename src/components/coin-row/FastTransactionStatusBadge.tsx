@@ -84,6 +84,9 @@ const StatusProps = {
 };
 
 const cx = StyleSheet.create({
+  icon: {
+    ...position.maxSizeAsObject(10),
+  },
   row: {
     alignItems: 'center',
     flexDirection: 'row',
@@ -131,11 +134,7 @@ export default React.memo(function FastTransactionStatusBadge({
         />
       )}
       {showIcon && (
-        <Icon
-          color={statusColor}
-          style={position.maxSizeAsObject(10)}
-          {...StatusProps[status]}
-        />
+        <Icon color={statusColor} style={cx.icon} {...StatusProps[status]} />
       )}
       <Text color={{ custom: statusColor }} size="14px" weight="semibold">
         {title}
