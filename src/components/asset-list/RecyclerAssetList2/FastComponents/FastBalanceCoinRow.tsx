@@ -61,7 +61,6 @@ const CoinCheckButton = React.memo(function CoinCheckButton({
 
           {coinIconPlaceholder && (
             <CoinIconIndicator
-              // @ts-expect-error
               isPinned={isPinned}
               style={cx.coinIconIndicator}
               theme={theme}
@@ -152,17 +151,19 @@ const MemoizedBalanceCoinRow = React.memo(
 
             <View style={[cx.innerContainer, isHidden && cx.hiddenRow]}>
               <View style={cx.row}>
-                <Text
-                  align="right"
-                  numberOfLines={1}
-                  size="16px"
-                  weight="medium"
-                >
-                  {item.name}
-                </Text>
+                <View style={cx.textWrapper}>
+                  <Text
+                    align="left"
+                    numberOfLines={1}
+                    size="16px"
+                    weight="medium"
+                  >
+                    {item.name}
+                  </Text>
+                </View>
 
                 <Text
-                  align="right"
+                  align="left"
                   color={{ custom: valueColor }}
                   size="16px"
                   weight="medium"
@@ -173,12 +174,16 @@ const MemoizedBalanceCoinRow = React.memo(
               </View>
 
               <View style={[cx.row, cx.bottom]}>
-                <Text
-                  color={{ custom: theme.colors.blueGreyDark50 }}
-                  size="14px"
-                >
-                  {nativeDisplay ?? ''}
-                </Text>
+                <View style={cx.textWrapper}>
+                  <Text
+                    align="left"
+                    color={{ custom: theme.colors.blueGreyDark50 }}
+                    numberOfLines={1}
+                    size="14px"
+                  >
+                    {nativeDisplay ?? ''}
+                  </Text>
+                </View>
 
                 <Text color={{ custom: changeColor }} size="14px">
                   {percentageChangeDisplay}
@@ -278,12 +283,6 @@ const cx = StyleSheet.create({
     left: 19,
     position: 'absolute',
   },
-  coinIconFallback: {
-    backgroundColor: '#25292E',
-    borderRadius: 20,
-    height: 40,
-    width: 40,
-  },
   coinIconIndicator: {
     left: 19,
     position: 'absolute',
@@ -316,5 +315,9 @@ const cx = StyleSheet.create({
   row: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  textWrapper: {
+    flex: 1,
+    paddingRight: 20,
   },
 });
