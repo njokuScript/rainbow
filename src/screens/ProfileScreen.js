@@ -7,9 +7,10 @@ import { Icon } from '../components/icons';
 import { Page } from '../components/layout';
 import { ProfileMasthead } from '../components/profile';
 import TransactionList from '../components/transaction-list/TransactionList';
-import { useTheme } from '../context/ThemeContext';
+import useNativeTransactionListAvailable from '../helpers/isNativeTransactionListAvailable';
 import NetworkTypes from '../helpers/networkTypes';
 import { useNavigation } from '../navigation/Navigation';
+import { useTheme } from '../theme/ThemeContext';
 import {
   useAccountSettings,
   useAccountTransactions,
@@ -27,16 +28,18 @@ const ProfileScreenPage = styled(Page)({
   flex: 1,
 });
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ navigation }) {
   const { colors } = useTheme();
   const [activityListInitialized, setActivityListInitialized] = useState(false);
   const isFocused = useIsFocused();
   const { navigate } = useNavigation();
+  const nativeTransactionListAvailable = useNativeTransactionListAvailable();
 
   const accountTransactions = useAccountTransactions(
     activityListInitialized,
     isFocused
   );
+
   const {
     isLoadingTransactions: isLoading,
     sections,
@@ -97,7 +100,7 @@ export default function ProfileScreen() {
           onPress={onPressBackButton}
         />
       </Header>
-      {network === NetworkTypes.mainnet && ios ? (
+      {network === NetworkTypes.mainnet && nativeTransactionListAvailable ? (
         <TransactionList
           addCashAvailable={addCashAvailable}
           contacts={contacts}
@@ -109,6 +112,7 @@ export default function ProfileScreen() {
         />
       ) : (
         <ActivityList
+          addCashAvailable={addCashAvailable}
           header={
             <ProfileMasthead
               addCashAvailable={addCashAvailable}
@@ -116,7 +120,10 @@ export default function ProfileScreen() {
             />
           }
           isEmpty={isEmpty}
+          isLoading={isLoading}
+          navigation={navigation}
           network={network}
+          recyclerListView={ios}
           sections={sections}
           {...accountTransactions}
         />
