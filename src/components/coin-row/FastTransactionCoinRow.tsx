@@ -13,27 +13,33 @@ const cx = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    paddingTop: 2,
   },
   bottomRow: {
     alignItems: 'center',
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingBottom: 2,
   },
   column: {
     flex: 1,
-    marginLeft: 8,
+    justifyContent: 'space-between',
+    marginLeft: 11,
+    paddingBottom: 1,
+    paddingTop: 1,
   },
   topRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   wholeRow: {
-    alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
+    paddingBottom: 10,
     paddingHorizontal: 19,
-    paddingVertical: 10,
+    paddingTop: 9,
+    marginVertical: 10,
+    // paddingVertical: 10,
   },
 });
 
