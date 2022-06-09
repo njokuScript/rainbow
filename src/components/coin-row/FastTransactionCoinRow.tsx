@@ -3,10 +3,10 @@ import { StyleSheet, View } from 'react-native';
 import { ButtonPressAnimation } from '../animations';
 import FastCoinIcon from '../asset-list/RecyclerAssetList2/FastComponents/FastCoinIcon';
 import FastTransactionStatusBadge from './FastTransactionStatusBadge';
-import { ThemeContextProps } from '@rainbow-me/context';
 import { Text } from '@rainbow-me/design-system';
 import { TransactionStatusTypes, TransactionTypes } from '@rainbow-me/entities';
 import { RenderProfiler } from '@rainbow-me/performance/utils';
+import { ThemeContextProps } from '@rainbow-me/theme';
 
 const cx = StyleSheet.create({
   balance: {

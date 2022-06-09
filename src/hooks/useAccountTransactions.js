@@ -5,9 +5,9 @@ import NetworkTypes from '../helpers/networkTypes';
 import useAccountSettings from './useAccountSettings';
 import useContacts from './useContacts';
 import useRequests from './useRequests';
-import { useTheme } from '@rainbow-me/context';
 import { transactionPressBuilder } from '@rainbow-me/helpers/transactionPressHandler';
 import { useNavigation } from '@rainbow-me/navigation';
+import { useTheme } from '@rainbow-me/theme';
 
 export const NOE_PAGE = 30;
 

@@ -4,9 +4,9 @@ import { initials } from '../../utils';
 import ChainBadge from '../coin-icon/ChainBadge';
 import { Text } from '../text';
 import { CoinIconSize } from './CoinIcon';
-import { ThemeContextProps, useTheme } from '@rainbow-me/context';
 import { ImgixImage } from '@rainbow-me/images';
 import { position } from '@rainbow-me/styles';
+import { ThemeContextProps, useTheme } from '@rainbow-me/theme';
 import ShadowStack from 'react-native-shadow-stack';
 
 const RVLIBorderRadius = 16.25;

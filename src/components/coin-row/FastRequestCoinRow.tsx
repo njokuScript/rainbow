@@ -5,11 +5,11 @@ import { StyleSheet, View } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { ButtonPressAnimation } from '../animations';
 import { FastRequestCoinIcon } from '../coin-icon';
-import { ThemeContextProps } from '@rainbow-me/context';
 import { Text } from '@rainbow-me/design-system';
 import { useNavigation } from '@rainbow-me/navigation';
 import { removeRequest } from '@rainbow-me/redux/requests';
 import Routes from '@rainbow-me/routes';
+import { ThemeContextProps } from '@rainbow-me/theme';
 
 const cx = StyleSheet.create({
   bottomRow: {
