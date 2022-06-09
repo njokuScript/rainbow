@@ -19,14 +19,12 @@ const cx = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingBottom: 2,
+    paddingBottom: 3,
   },
   column: {
     flex: 1,
     justifyContent: 'space-between',
     marginLeft: 11,
-    paddingBottom: 1,
-    paddingTop: 1,
   },
   topRow: {
     flexDirection: 'row',
@@ -35,11 +33,8 @@ const cx = StyleSheet.create({
   wholeRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingBottom: 10,
+    marginVertical: 17,
     paddingHorizontal: 19,
-    paddingTop: 9,
-    marginVertical: 10,
-    // paddingVertical: 10,
   },
 });
 

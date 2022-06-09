@@ -13,23 +13,23 @@ import { ThemeContextProps } from '@rainbow-me/theme';
 
 const cx = StyleSheet.create({
   bottomRow: {
-    alignItems: 'center',
-    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
   column: {
     flex: 1,
-    justifyContent: 'center',
-    marginLeft: 8,
+    justifyContent: 'space-between',
+    marginLeft: 11,
   },
   topRow: {
     flexDirection: 'row',
-    marginTop: 8,
+    marginTop: 15,
   },
   wholeRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    marginBottom: 8,
+    marginTop: 13,
     paddingHorizontal: 19,
   },
 });
@@ -51,9 +51,6 @@ export default React.memo(function RequestCoinRow({
   const buttonRef = useRef();
   const dispatch = useDispatch();
   const { navigate } = useNavigation();
-  // const [expiresAt, setExpiresAt] = useState<Date | null>(null);
-  // const [expirationColor, setExpirationColor] = useState<string>('');
-  // const [percentElapsed, setPercentElapsed] = useState<number>(0);
 
   const [state, setState] = useState<{
     expirationColor: string;
@@ -118,11 +115,9 @@ export default React.memo(function RequestCoinRow({
           <View style={cx.topRow}>
             <Text
               color={{ custom: state.expirationColor }}
-              containsEmoji
               size="14px"
               weight="semibold"
             >
-              🕓{' '}
               {lang.t('exchange.coin_row.expires_in', {
                 minutes: minutes || 0,
               })}

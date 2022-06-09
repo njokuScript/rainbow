@@ -4,8 +4,9 @@ import { Text } from '@rainbow-me/design-system';
 
 const cx = StyleSheet.create({
   activityListHeader: {
+    paddingBottom: 18,
     paddingHorizontal: 19,
-    paddingVertical: 15,
+    paddingTop: 21,
   },
 });
 
