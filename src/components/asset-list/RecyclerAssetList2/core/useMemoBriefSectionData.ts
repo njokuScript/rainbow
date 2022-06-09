@@ -10,6 +10,7 @@ import {
   useOpenInvestmentCards,
   useOpenSavings,
   useOpenSmallBalances,
+  useWalletSectionsData,
 } from '@rainbow-me/hooks';
 
 const FILTER_TYPES = {
@@ -42,8 +43,13 @@ export default function useMemoBriefSectionData({
     sectionsDataToUse = useExternalWalletSectionsData({
       address: externalAddress,
     }).briefSectionsData;
+  } else if (!briefSectionsData) {
+    // briefSectionsData is an optional thing - we might send it from the tree
+    // so we run it only once for a tree
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    sectionsDataToUse = useWalletSectionsData().briefSectionsData!;
   } else {
-    sectionsDataToUse = briefSectionsData!;
+    sectionsDataToUse = briefSectionsData;
   }
 
   const { isSmallBalancesOpen } = useOpenSmallBalances();

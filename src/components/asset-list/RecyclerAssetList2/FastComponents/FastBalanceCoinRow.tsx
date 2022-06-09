@@ -226,9 +226,8 @@ export default React.memo(function BalanceCoinRow({
   const maybeCallback = useRef<null | (() => void)>(null);
   maybeCallback.current = isCoinListEdited ? onPress : null;
 
-  // we return false to make sure we don't run includes for each row when it's not needed
-  const isHidden = isCoinListEdited ? hiddenCoins[uniqueId] : false;
-  const isPinned = isCoinListEdited ? pinnedCoins[uniqueId] : false;
+  const isHidden = hiddenCoins[uniqueId];
+  const isPinned = pinnedCoins[uniqueId];
 
   return (
     <View style={[cx.rootContainer, !isCoinListEdited && cx.nonEditMode]}>
@@ -257,9 +256,10 @@ export default React.memo(function BalanceCoinRow({
 
 const cx = StyleSheet.create({
   bottom: {
-    marginTop: 12,
+    marginTop: 10,
   },
   checkboxContainer: {
+    marginRight: 5,
     width: 51,
   },
   checkboxInnerContainer: {
@@ -289,9 +289,7 @@ const cx = StyleSheet.create({
   },
   container: {
     flexDirection: 'row',
-    marginLeft: 2,
-    marginRight: 19,
-    marginVertical: 9.5,
+    marginRight: 18,
   },
   flex: {
     flex: 1,
@@ -311,6 +309,7 @@ const cx = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     flexDirection: 'row',
+    marginTop: -1,
   },
   row: {
     flexDirection: 'row',
